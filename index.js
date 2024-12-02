@@ -19,8 +19,10 @@ const config = {
 const { Client } = require('pg');
 
 const client = new Client({
-  connectionString: config.DATABASE.URL_EXT+'?ssl=true',
-	ssl: true
+  connectionString: config.DATABASE.URL_INT+'?ssl=true',
+	ssl: {
+		 rejectUnauthorized: false
+	}
 });
 console.log(client)
 client.connect(function(err) {
