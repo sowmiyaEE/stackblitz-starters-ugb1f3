@@ -19,7 +19,7 @@ const config = {
 const { Client } = require('pg');
 
 const client = new Client({
-  connectionString: config.DATABASE.URL_INT
+  connectionString: config.DATABASE.URL_EXT
 });
 console.log(client)
 client.connect(function(err) {
