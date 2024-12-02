@@ -1,5 +1,11 @@
 const express = require('express');
 const pg = require('pg');
+const fs = require("fs");
+const config = {
+  PORT: process.env.port || 8085,
+};
+/*
+var fs = require('fs');
 const config = {
   DATABASE: {
     NAME: 'notes_jw8o',
@@ -15,45 +21,36 @@ const config = {
       'postgresql://sowmiya:20EQ4IhQfsJ21BbxgcpboAjfq4b5JRMt@dpg-ct4kfo52ng1s73a5hql0-a/notes_jw8o',
   },
   PORT: process.env.port || 8085,
-};
-const { Client } = require('pg');
+};*/
 
-const client = new Client({
-  connectionString: config.DATABASE.URL_EXT+'?ssl=true',
-	ssl: {
-		 rejectUnauthorized: false
-	}
+var client = new pg.Client({user: "sgpostgres", password: "h7ah.2Zb4sVFYouH", database: "classy-drink-9748", host: "SG-classy-drink-9748-6363-pgsql-master.servers.mongodirector.com", port: 5432, ssl : { rejectUnauthorized : true, ca : fs.readFileSync("./ssl").toString() }});
+
+console.log(client);
+client.connect(function (err) {
+  if (err) throw err;
+  console.log('Connected!');
 });
-console.log(client)
-client.connect(function(err) {
-  if (err) {console.log("error in client connection", err); }
-  console.log("Connected!");
-})
 
-    client.query(
-      'insert into table values($1,$2,$3,$4)',
-      [1, 2, 2, 3],
-      (err, res) => {
-        if (err) {
-          console.log(err);
-        } else {
-          cosole.log(res);
-        }
-      }
-    );
-    // Close the connection when done
-		client
-				.end()
-				.then(() => {
-					console.log('Connection to PostgreSQL closed');
-				})
-				.catch((err) => {
-					console.error('Error closing connection', err);
-				});
-		
-
-
-
+client.query(
+  'insert into table values($1,$2,$3,$4)',
+  [1, 2, 2, 3],
+  (err, res) => {
+    if (err) {
+      console.log(err);
+    } else {
+      cosole.log(res);
+    }
+  }
+);
+// Close the connection when done
+client
+  .end()
+  .then(() => {
+    console.log('Connection to PostgreSQL closed');
+  })
+  .catch((err) => {
+    console.error('Error closing connection', err);
+  });
 
 const cors = require('cors');
 const morgan = require('morgan');
